@@ -189,6 +189,7 @@ export default {
       if(this.birthday_user) {
         
       }else {
+        this.m
         window.location.href = '/login'
       }
     }
