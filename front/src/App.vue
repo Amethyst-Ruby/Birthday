@@ -1,12 +1,18 @@
 <template>
-  <div style="width: 100%">
+  <div>
     <!-- <Menu class="menu"></Menu> -->
   </div>
   <router-view></router-view>
 </template>
 
-<script setup>
+<script>
+import jsCookie from 'js-cookie';
 import Menu from './components/Menu.vue';
+export default {
+  birthday_user() {
+    return jsCookie.get('birthday_user');
+  },
+};
 </script >
 
 <style>
@@ -16,5 +22,4 @@ body {
   padding: 0;
   margin: 0;
 }
-
 </style>

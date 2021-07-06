@@ -22,24 +22,18 @@
     </div>
     <div class="btnBox">
       <!-- 设置按钮 -->
-      <el-button icon="el-icon-setting" circle id="settingBtn"></el-button>
+      <el-button icon="el-icon-setting" circle @click="settingBtn"></el-button>
       <!-- 添加按钮 -->
       <el-button
         icon="el-icon-plus"
         circle
-        id="settingBtn"
-        @click="dialogSettingVisible = true"
+        @click="addBtn"
       ></el-button>
     </div>
 
     <!-- 弹出框：添加朋友 -->
-    <el-dialog
-      title="添加朋友"
-      v-model="dialogSettingVisible"
-      width="30%"
-      :before-close="handleClose"
-    >
-      <el-form ref="form" :model="form" label-width="80px">
+    <el-dialog title="添加朋友" v-model="dialogAddVisible" width="30%">
+      <el-form ref="form" :model="form" label-width="90px">
         <el-form-item label="姓名：">
           <el-input
             v-model="form.name"
@@ -65,6 +59,44 @@
             v-model="form.date1"
             style="width: 100%"
           ></el-date-picker>
+        </el-form-item>
+
+        <el-form-item label="主页显示：" prop="delivery">
+          <el-switch
+            v-model="form.delivery"
+            active-text="显示"
+            inactive-text="不显示"
+          ></el-switch>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogAddVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogAddVisible = false"
+            >确 定</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
+
+    <!-- 弹出框：设置 -->
+    <el-dialog title="设置" v-model="dialogSettingVisible" width="30%">
+      <el-form ref="form" :model="form" label-width="90px">
+        <el-form-item label="主页展示：">
+          <el-select
+            v-model="value"
+            filterable
+            placeholder="请选择主页展示的朋友姓名"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -110,6 +142,7 @@
 </template>
 
 <script >
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -117,7 +150,48 @@ export default {
       day: '100',
       form: {},
       dialogSettingVisible: false,
+      dialogAddVisible: false,
+      options: [
+        {
+          value: '选项1',
+          label: '黄金糕',
+        },
+        {
+          value: '选项2',
+          label: '双皮奶',
+        },
+        {
+          value: '选项3',
+          label: '蚵仔煎',
+        },
+        {
+          value: '选项4',
+          label: '龙须面',
+        },
+        {
+          value: '选项5',
+          label: '北京烤鸭',
+        },
+      ],
+      value: '',
     };
+  },
+  methods: {
+    settingBtn() {
+      console.log('缓存中获取birthday_user:>>', this.birthday_user);
+      if (this.birthday_user) {
+      } else {
+        this.dialogSettingVisible = true;
+      }
+    },
+    addBtn(){
+      console.log('缓存中获取birthday_user:>>', this.birthday_user);
+      if(this.birthday_user) {
+        
+      }else {
+        window.location.href = '/login'
+      }
+    }
   },
 };
 </script>
