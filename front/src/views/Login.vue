@@ -16,7 +16,7 @@
         >
           <el-form-item label="姓名">
             <el-input
-              v-model="form.name"
+              v-model="form.username"
               placeholder="请填写姓名 / 手机号"
               style="width: 100%"
             >
@@ -29,8 +29,14 @@
               style="width: 100%"
             ></el-input>
           </el-form-item>
-          <el-button style="width: 100%" @click="login">登录</el-button>
-          <el-form-item style="width: 100%"> </el-form-item>
+
+          <el-form-item>
+            <el-button style="width: 100%" @click="login">登录</el-button>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button style="width: 100%" @click="back">返回</el-button>
+          </el-form-item>
         </el-form>
       </div>
     </div>
@@ -39,6 +45,9 @@
 
 <script>
 import axios from 'axios';
+import md5 from 'md5-slim';
+import jsCookie from 'js-cookie';
+
 export default {
   data() {
     return {
@@ -48,12 +57,45 @@ export default {
   },
   methods: {
     login() {
-      let form = this.form;
+      let formData = {
+        username: this.form.username,
+        password: md5(this.form.password),
+      };
       axios
-        .post('/api/login', form)
-        .then((res) => {})
+        .post('/api/login', formData)
+        .then((res) => {
+          console.log(res);
+          if (res.data.error === true) {
+            this.$message({
+              type: 'error',
+              message: res.data.message,
+            });
+          } else {
+            this.$message({
+              type: 'success',
+              message: '登录成功，即将跳转',
+            });
+            const time = setTimeout(() => {
+              window.location.href = '/';
+              clearTimeout(time);
+            }, 1000);
+          }
+        })
         .catch((err) => {});
     },
+    back() {
+      window.location.href = '/';
+    },
+    checkIsLogined() {
+      // const birthday_userid = jsCookie.get('birthday_userid');
+      // console.log('birthday_userid:>>', birthday_userid);
+      // if (this.birthday_userid) {
+      //   window.location.href = '/';
+      // }
+    },
+  },
+  mounted() {
+    console.log(jsCookie.get('birthday_userid'));
   },
 };
 </script>

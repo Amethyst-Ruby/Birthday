@@ -1,17 +1,11 @@
 <template>
-  <div>
-    <!-- <Menu class="menu"></Menu> -->
-  </div>
   <router-view></router-view>
 </template>
 
 <script>
-import jsCookie from 'js-cookie';
-import Menu from './components/Menu.vue';
+
 export default {
-  birthday_user() {
-    return jsCookie.get('birthday_user');
-  },
+  
 };
 </script >
 
