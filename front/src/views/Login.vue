@@ -13,8 +13,9 @@
           :model="form"
           label-width="80px"
           :label-position="labelPosition"
+          :rules="rules"
         >
-          <el-form-item label="姓名">
+          <el-form-item label="姓名" prop="username">
             <el-input
               v-model="form.username"
               placeholder="请填写姓名 / 手机号"
@@ -22,7 +23,7 @@
             >
             </el-input>
           </el-form-item>
-          <el-form-item label="密码">
+          <el-form-item label="密码" prop="password">
             <el-input
               v-model="form.password"
               placeholder="请输入密码"
@@ -31,7 +32,9 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button style="width: 100%" @click="login">登录</el-button>
+            <el-button style="width: 100%" @click="login"
+              >登录 & 注册</el-button
+            >
           </el-form-item>
 
           <el-form-item>
@@ -51,12 +54,29 @@ import jsCookie from 'js-cookie';
 export default {
   data() {
     return {
-      form: {},
+      form: {
+        username: '',
+        password: '',
+      },
+
+      rules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+        ],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+      },
+
       labelPosition: 'top',
     };
   },
   methods: {
     login() {
+      if (this.form.username === '') {
+        return;
+      }
+      if (this.form.password === '') {
+        return;
+      }
       let formData = {
         username: this.form.username,
         password: md5(this.form.password),
@@ -95,7 +115,14 @@ export default {
     },
   },
   mounted() {
-    console.log(jsCookie.get('birthday_userid'));
+    if (this.birthday_userid) {
+      location.href = '/';
+    }
+  },
+  computed: {
+    birthday_userid() {
+      return jsCookie.get('birthday_userid');
+    },
   },
 };
 </script>

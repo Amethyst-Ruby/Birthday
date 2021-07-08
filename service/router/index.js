@@ -31,10 +31,12 @@ router.post('/api/login', async ctx => {
             if (queryPassword === password) {
                 // 设置缓存，防止重新登录
                 ctx.cookies.set('birthday_username', username, {
-                    maxAge: 1000 * 60 * 60 * 24 * 7
+                    maxAge: 1000 * 60 * 60 * 24 * 7,
+                    httpOnly: false,
                 })
                 ctx.cookies.set('birthday_userid', id, {
-                    maxAge: 1000 * 60 * 60 * 24 * 7
+                    maxAge: 1000 * 60 * 60 * 24 * 7,
+                    httpOnly: false,
                 })
                 ctx.body = {
                     error: false,
@@ -52,6 +54,26 @@ router.post('/api/login', async ctx => {
         ctx.body = {
             error: 'CANNOT_PARSE'
         };
+    }
+})
+
+router.get('/api/logout', async ctx => {
+    try {
+        ctx.cookies.set('birthday_username', '', {
+            maxAge: 0,
+        })
+        ctx.cookies.set('birthday_userid', '', {
+            maxAge: 0,
+        })
+        ctx.body = {
+            error: false
+        }
+    } catch (error) {
+        console.log(error);
+        ctx.status = 400
+        ctx.body = {
+            error: 'CANNOT_PARSE'
+        }
     }
 })
 module.exports = router
